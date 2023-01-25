@@ -4,9 +4,11 @@ const cat = require("./cat")
 
 process.stdout.write('prompt > ');
 
-// The stdin 'data' event fires after a user types in a line
 process.stdin.on('data', (data) => {
-  const cmd = data.toString().trim(); //remove the newline
+  const input = data.toString().trim().split(" ")
+  const cmd = input[0]
+  const args = input.slice(1)
+
   if (cmd === 'pwd') {
     pwd()
   } 
@@ -16,8 +18,7 @@ process.stdin.on('data', (data) => {
   }
 
   else if (cmd.startsWith('cat')) {
-    const args = cmd.split(" ").slice(1)
-    cat(args)
+    cat(args, done)
   }
   
   else {
@@ -26,3 +27,7 @@ process.stdin.on('data', (data) => {
   }
 });
 
+function done (output) {
+  process.stdout.write(output)
+  process.stdout.write('\nprompt > ')
+}
